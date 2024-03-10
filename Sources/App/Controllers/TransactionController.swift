@@ -53,7 +53,14 @@ struct TransactionController: RouteCollection {
         let actor = TransactionActor()
         
         try await req.db.transaction { database in
-            guard let client = try await Client.query(on: database).filter(\.$clientId == clientId).first() else {
+            let query = Client.query(on: database)
+            
+            if req.db is SQLDatabase {
+                query.filter(\.$clientId == clientId)
+                query.filter(.sql(raw: "1 = 1 FOR UPDATE"))
+            }
+            
+            guard let client = try await query.first() else {
                 throw Abort(.notFound)
             }
             

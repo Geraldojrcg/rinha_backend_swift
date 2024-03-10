@@ -1,11 +1,15 @@
-CREATE TABLE client (
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+
+CREATE UNLOGGED TABLE client (
 	"id" uuid DEFAULT gen_random_uuid(),
 	"client_id" SERIAL PRIMARY KEY,
 	"amount" INTEGER NOT NULL,
 	"limit" INTEGER NOT NULL
 );
 
-CREATE TABLE transaction (
+CREATE UNLOGGED TABLE transaction (
 	"id" uuid DEFAULT gen_random_uuid(),
 	"transaction_id" SERIAL PRIMARY KEY,
 	"value" INTEGER NOT NULL,

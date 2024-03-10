@@ -82,12 +82,10 @@ USER vapor:vapor
 
 COPY wait-for-it.sh /app
 
-RUN chmod +x wait-for-it.sh
-
 # Let Docker bind to port 8080
 EXPOSE 8080
 
 # Start the Vapor service when the image is run, default to listening on 8080 in production environment
-ENTRYPOINT ["./App"]
+ENTRYPOINT ["./wait-for-it.sh", "database:5432", "--", "./App"]
 
-CMD ["./wait-for-it.sh", "database:5432", "--", "serve", "--env", "production", "--hostname", "0.0.0.0", "--port", "8080"]
+CMD ["serve", "--env", "production", "--hostname", "0.0.0.0", "--port", "8080"]
